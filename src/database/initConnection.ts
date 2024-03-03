@@ -1,15 +1,14 @@
-import { Pool, PoolClient } from "pg";
-import { runMigration } from './runMigrations'
+import { Pool, PoolClient } from 'pg';
+import { runMigration } from './runMigrations';
 
 export class Connections {
   public async init(): Promise<{ coreDB: PoolClient }> {
-
     const coreDbConfig = this.getCoreDatabaseConfig();
     const coreDB = await coreDbConfig.connect();
 
     runMigration(coreDB);
 
-    return { coreDB }
+    return { coreDB };
   }
 
   private getCoreDatabaseConfig(): Pool {

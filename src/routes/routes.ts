@@ -4,13 +4,12 @@ import { addMainRoutes } from './addMainRoutes';
 import { RouterHandler } from '../security/routerHandler';
 
 export class Routes {
+  constructor(private readonly routerHandler: RouterHandler) {}
 
-    constructor(private routerHandler: RouterHandler) { }
+  public setup(): Router {
+    addMainRoutes(this.routerHandler);
 
-    public setup(): Router {
-        addMainRoutes(this.routerHandler);
-
-        const router = this.routerHandler.getRouter();
-        return router;
-    }
+    const router = this.routerHandler.getRouter();
+    return router;
+  }
 }

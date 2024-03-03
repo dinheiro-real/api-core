@@ -1,4 +1,4 @@
-import { HttpServer } from "./configs/server";
+import { HttpServer } from './configs/server';
 
 require('dotenv').config();
 
