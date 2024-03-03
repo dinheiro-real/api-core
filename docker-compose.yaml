@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  app:
+    container_name: docker_api
+    build: .
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    depends_on:
+      - db
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
+    command: npx ts-node src/index.ts
+
+  db:
+    container_name: docker_database
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:

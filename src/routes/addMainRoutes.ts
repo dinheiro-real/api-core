@@ -1,5 +1,12 @@
-import { Router, Request, Response } from "express";
+import { HttpMethod } from "../constants/configs/enum";
+import { RouterHandler } from "../security/routerHandler";
 
-export function addMainRoutes(route: Router) {
-    route.get('/', (req: Request, res: Response) => res.send('Hello, World'));
+export function addMainRoutes(routerHandler: RouterHandler): void {
+    routerHandler.addRoute({
+        path: '/',
+        method: HttpMethod.GET,
+        controllerName: 'MainController',
+        actionName: 'healthAction',
+        middlewares: []
+    })
 }
