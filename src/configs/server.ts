@@ -1,10 +1,10 @@
 import express, { Express, Router } from 'express';
 import { Routes } from '../routes/routes';
-import { DatabaseConfigurator } from './dbConfigurator';
 import { AccessControl } from '../security/accessControl';
 import { RouterHandler } from '../security/routerHandler';
 import { ControllerGroup, Controllers } from '../controllers/controllers';
-import { Pool } from 'pg';
+import { PoolClient } from 'pg';
+import { Connections } from '../database/initConnection';
 
 export class HttpServer {
     private app: Express;
@@ -17,8 +17,8 @@ export class HttpServer {
     }
 
     public async initialize() {
-        const database = await this.setupDatabase();
-        const controllers = this.setupControllers(database);
+        const { coreDB } = await new Connections().init();
+        const controllers = this.setupControllers(coreDB);
         this.setupRoutes(controllers);
 
         this.app.listen(this.serverPort, () => {
@@ -35,14 +35,7 @@ export class HttpServer {
         this.app.use(configurator.setup());
     }
 
-    private async setupDatabase(): Promise<Pool> {
-        const databaseConfigurator = new DatabaseConfigurator();
-        await databaseConfigurator.testConnection();
-        const database = databaseConfigurator.getPool();
-        return database;
-    }
-
-    private setupControllers(database: Pool): ControllerGroup {
+    private setupControllers(database: PoolClient): ControllerGroup {
         const controllers = new Controllers(database).setup();
 
         return controllers;

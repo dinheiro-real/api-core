@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Pool } from 'pg';
+import { Pool, PoolClient } from 'pg';
 
 import { MainController } from './main.controller';
 
@@ -17,7 +17,7 @@ export interface ControllerGroup {
 
 
 export class Controllers {
-    constructor(private database: Pool) { }
+    constructor(private database: PoolClient) { }
 
     public setup(): ControllerGroup {
         return {
