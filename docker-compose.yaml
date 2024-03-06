@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app:
-    container_name: docker_api
+    container_name: docker_api_dinheiro
     build: .
     ports:
       - '${SERVER_PORT}:${SERVER_PORT}'
@@ -9,10 +9,11 @@ services:
       - db
     environment:
       - SERVER_PORT=${SERVER_PORT}
+      - DATABASE_URL=${DATABASE_URL}
     command: npx ts-node src/index.ts
 
   db:
-    container_name: docker_database
+    container_name: docker_db_dinheiro
     image: postgres
     env_file:
       - .env
@@ -20,6 +21,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+    hostname: db
 
 volumes:
   pgdata:

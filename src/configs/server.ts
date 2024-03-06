@@ -1,12 +1,12 @@
 import express, { Express, Router } from 'express';
 import cors from 'cors';
+import { Sequelize } from 'sequelize';
 
 import { Routes } from '../routes/routes';
 import { AccessControl } from '../security/accessControl';
 import { RouterHandler } from '../security/routerHandler';
 import { ControllerGroup, Controllers } from '../controllers/controllers';
-import { PoolClient } from 'pg';
-import { Connections } from '../database/initConnection';
+import { Connections } from '../database/connections';
 
 export class HttpServer {
   private app: Express;
@@ -20,12 +20,14 @@ export class HttpServer {
   }
 
   public async initialize() {
-    const { coreDB } = await new Connections().init();
+    const { coreDB } = await new Connections().initConnections();
     const controllers = this.setupControllers(coreDB);
     this.setupRoutes(controllers);
 
     this.app.listen(this.serverPort, () => {
-      console.log(`Server is running at http://localhost:${this.serverPort}`);
+      console.log(
+        `☀️ Server is running at http://localhost:${this.serverPort}`
+      );
     });
   }
 
@@ -42,7 +44,7 @@ export class HttpServer {
     this.app.use(configurator.setup());
   }
 
-  private setupControllers(database: PoolClient): ControllerGroup {
+  private setupControllers(database: Sequelize): ControllerGroup {
     const controllers = new Controllers(database).setup();
 
     return controllers;

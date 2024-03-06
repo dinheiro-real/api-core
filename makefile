@@ -1,5 +1,3 @@
-SERVICE=app
-
 ps:
 	docker ps -a
 
@@ -10,16 +8,16 @@ up:
 	docker-compose up -d
 
 logs-api:
-	docker logs -f docker_api
+	docker logs -f docker_api_dinheiro
 
 logs-db:
-	docker logs -f docker_database
+	docker logs -f docker_db_dinheiro
 
 down:
 	docker-compose down -v
 
 migrate:
-	docker-compose run --rm $(SERVICE) database/migrations/migrate.js migrate
+	npx sequelize-cli db:migrate --env dev
 
-undo_last_migration:
-	docker-compose run --rm $(SERVICE) database/migrations/migrate.js undo_last_migration
+migrate-undo:
+	npx sequelize-cli db:migrate:undo --env dev

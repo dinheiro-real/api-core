@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { PoolClient } from 'pg';
+import { Sequelize } from 'sequelize';
 
 import { MainController } from './main.controller';
 
@@ -16,7 +16,7 @@ export interface ControllerGroup {
 }
 
 export class Controllers {
-  constructor(private database: PoolClient) {}
+  constructor(private database: Sequelize) {}
 
   public setup(): ControllerGroup {
     return {
